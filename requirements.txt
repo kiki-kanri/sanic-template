@@ -1,2 +1,3 @@
+git+https://github.com/pyx/sanic-cookiesession
 sanic
 sanic-mongodb-extension
