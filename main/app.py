@@ -1,12 +1,17 @@
 import sanic_cookiesession
 
+from mongoengine import connect
 from pathlib import Path
-from sanic import Blueprint, Request, Sanic
+from sanic import Blueprint, Sanic
 
 from library.utils import import_attribute
 
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def connect_db(sanic_app: Sanic):
+    connect(**sanic_app.config['DATABASES']['default'])
 
 
 def install_apps(sanic_app: Sanic):
@@ -29,6 +34,7 @@ def create_app():
     sanic_app.update_config(ROOT / 'instance' / 'config.py')
     sanic_cookiesession.setup(sanic_app)
 
+    connect_db(sanic_app)
     install_apps(sanic_app)
 
     return sanic_app
