@@ -5,9 +5,7 @@ from pathlib import Path
 from sanic import Blueprint, Sanic
 
 from library.utils import import_attribute
-
-
-ROOT = Path(__file__).resolve().parent.parent
+from .settings import ROOT
 
 
 def connect_db(sanic_app: Sanic):
@@ -15,7 +13,8 @@ def connect_db(sanic_app: Sanic):
 
 
 def install_apps(sanic_app: Sanic):
-    for app_name in sanic_app.config.get('INSTALLED_APPS'):
+    # App blueprints
+    for app_name in sanic_app.config['INSTALLED_APPS']:
         bps: list[Blueprint] = import_attribute(
             f'apps.{app_name}.blueprints'
         )
@@ -28,10 +27,21 @@ def install_apps(sanic_app: Sanic):
 
             sanic_app.blueprint(bp, url_prefix=url_prefix)
 
+    # Middlewares
+    for middleware_path in sanic_app.config['MIDDLEWARES']:
+        middleware = import_attribute(middleware_path)
+
+        if rq_func := getattr(middleware, 'request', None):
+            sanic_app.on_request(rq_func)
+
+        if rp_func := getattr(middleware, 'response', None):
+            sanic_app.on_response(rp_func)
+
 
 def create_app():
     sanic_app = Sanic('SanicApp')
-    sanic_app.update_config(ROOT / 'instance' / 'config.py')
+    sanic_app.update_config(ROOT / 'instance/config.py')
+    sanic_app.update_config(ROOT / 'main/settings.py')
     sanic_cookiesession.setup(sanic_app)
 
     connect_db(sanic_app)

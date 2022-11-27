@@ -1,5 +1,3 @@
-AUTO_EXTEND = False
-
 DATABASES = {
     'default': {
         'authentication_source': 'admin',
@@ -11,11 +9,4 @@ DATABASES = {
     }
 }
 
-FALLBACK_ERROR_FORMAT = 'json'
-
-INSTALLED_APPS = [
-    'home'
-]
-
-NOISY_EXCEPTIONS = True
 SESSION_COOKIE_SECRET_KEY = ''
