@@ -1,4 +1,4 @@
-from mongoengine import DENY, fields
+from mongoengine import fields
 
 from library.model import BaseModel, BaseQuerySet
 

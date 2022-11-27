@@ -7,12 +7,12 @@ FALLBACK_ERROR_FORMAT = 'json'
 
 # App dir name
 INSTALLED_APPS = [
-    'home'
+    'example'
 ]
 
 # Middleware class import path
 MIDDLEWARES = [
-    'apps.home.middlewares.example.ExampleMiddleware'
+    'apps.example.middlewares.example.ExampleMiddleware'
 ]
 
 NOISY_EXCEPTIONS = True
